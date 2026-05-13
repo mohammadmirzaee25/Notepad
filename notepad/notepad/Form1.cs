@@ -173,5 +173,28 @@ namespace notepad
             filename = null;
             saveToolStripMenuItem_Click(null, null);
         }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(!string.IsNullOrEmpty(textBox1.SelectedText))
+                Clipboard.SetText(textBox1.SelectedText);
+        }
+
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox1.SelectedText))
+            {
+                Clipboard.SetText(textBox1.SelectedText);
+                textBox1.SelectedText = "";
+            }
+        }
+
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Clipboard.ContainsText())
+                textBox1.SelectedText = Clipboard.GetText();
+        }
+
     }
 }
