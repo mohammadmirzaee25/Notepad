@@ -19,33 +19,61 @@ namespace notepad
 
         private void backgroundToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            textBox1.BackColor = Color.FromName(((ToolStripMenuItem)sender).Text);
-            foreach(ToolStripMenuItem x in backgroundToolStripMenuItem.DropDownItems)
+            if (((ToolStripMenuItem)sender).Text != "Custom")
             {
-                if (((ToolStripMenuItem)sender).Text == x.Text)
+                textBox1.BackColor = Color.FromName(((ToolStripMenuItem)sender).Text);
+                foreach (ToolStripMenuItem x in backgroundToolStripMenuItem.DropDownItems)
                 {
-                    x.Checked = true;
+                    if (((ToolStripMenuItem)sender).Text == x.Text)
+                    {
+                        x.Checked = true;
+                    }
+                    else
+                    {
+                        x.Checked = false;
+                    }
                 }
-                else
+            }
+            else
+            {
+                foreach (ToolStripMenuItem x in backgroundToolStripMenuItem.DropDownItems)
                 {
                     x.Checked = false;
                 }
+                customToolStripMenuItem.Checked = true;
+                colorDialog1.FullOpen = true;
+                colorDialog1.ShowDialog();
+                textBox1.BackColor = colorDialog1.Color;
+
             }
         }
 
         private void forecolorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            textBox1.ForeColor = Color.FromName(((ToolStripMenuItem)sender).Text);
-            foreach (ToolStripMenuItem x in forecolorToolStripMenuItem.DropDownItems)
+            if (((ToolStripMenuItem)sender).Text != "Custom")
             {
-                if (((ToolStripMenuItem)sender).Text == x.Text)
+                textBox1.ForeColor = Color.FromName(((ToolStripMenuItem)sender).Text);
+                foreach (ToolStripMenuItem x in forecolorToolStripMenuItem.DropDownItems)
                 {
-                    x.Checked = true;
+                    if (((ToolStripMenuItem)sender).Text == x.Text)
+                    {
+                        x.Checked = true;
+                    }
+                    else
+                    {
+                        x.Checked = false;
+                    }
                 }
-                else
+            }else{
+                foreach (ToolStripMenuItem x in forecolorToolStripMenuItem.DropDownItems)
                 {
                     x.Checked = false;
                 }
+                customToolStripMenuItem1.Checked = true;
+                colorDialog1.FullOpen = true;
+                colorDialog1.ShowDialog();
+                textBox1.ForeColor = colorDialog1.Color;
+
             }
         }
 
@@ -57,6 +85,93 @@ namespace notepad
             {
                 Application.Exit();
             }
+        }
+
+        private void showStatusToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            showStatusToolStripMenuItem.Checked = !showStatusToolStripMenuItem.Checked;
+            statusStrip1.Visible = !statusStrip1.Visible;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //System.IO.File.WriteAllText("configs.txt", textBox1.BackColor.Name);
+            newToolStripMenuItem_Click(null, null);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+           //string c;
+          //  c=System.IO.File.ReadAllText("configs.txt");
+           // textBox1.BackColor = Color.FromName(c);
+           saved = true;
+        }
+        string  filename = null;
+        bool saved = false;
+        
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(filename == null)
+            {
+                DialogResult r = new DialogResult();
+                saveFileDialog1.Filter = "text file|*.txt|document file |*.doc |allfile |*.*";
+                saveFileDialog1.DefaultExt = "txt";
+                r=saveFileDialog1.ShowDialog();
+                if (DialogResult.Cancel == r)
+                    return;
+                filename = saveFileDialog1.FileName;
+
+            }
+            System.IO.File.WriteAllText(filename, textBox1.Text);
+            saved = true;
+            this.Text = filename;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            saved = false;
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saved == false)
+            {
+                DialogResult r;
+                r=MessageBox.Show("do you want to save","Save file?", MessageBoxButtons.YesNoCancel);
+                if (r == DialogResult.Cancel)
+                    return;
+                if (r == DialogResult.Yes)
+                    saveToolStripMenuItem_Click(null, null);
+            }
+            saved = true;
+            filename = null;
+            textBox1.Text = "";
+            this.Text = "form 1";
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+
+        {
+            if (saved==false)
+                newToolStripMenuItem_Click(null, null);
+
+            DialogResult r = new DialogResult();
+            openFileDialog1.Filter = "text file|*.txt|document file |*.doc |allfile |*.*";
+            r=openFileDialog1.ShowDialog();
+            if (r == DialogResult.Cancel)
+                return;
+            filename = openFileDialog1.FileName;
+            this.Text = filename;
+            textBox1.Text = System.IO.File.ReadAllText(filename);
+            saved = true;
+
+
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            filename = null;
+            saveToolStripMenuItem_Click(null, null);
         }
     }
 }
