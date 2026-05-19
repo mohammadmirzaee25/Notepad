@@ -115,6 +115,8 @@ namespace notepad
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(printDocument1_PrintPage);
+
             //string c;
             //  c=System.IO.File.ReadAllText("configs.txt");
             // textBox1.BackColor = Color.FromName(c);
@@ -124,7 +126,7 @@ namespace notepad
 
                 x = System.IO.File.ReadAllLines("myfileconfig.txt");
                 textBox1.BackColor = Color.FromName(x[0]);
-                textBox1.Font = new Font(x[1], Convert.ToInt16(x[2]);
+                textBox1.Font = new Font(x[1], Convert.ToInt16(x[2]));
 
                 this.Height = Convert.ToInt16(x[3]);
                 this.Width = Convert.ToInt16(x[4]);
@@ -406,6 +408,28 @@ namespace notepad
             setitemmenues_enabled();
         }
 
+        private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            e.Graphics.DrawString(textBox1.Text, textBox1.Font, Brushes.Black, 0, 0);
+        }
+
+        private void printToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            printDialog1.Document = printDocument1;
+
+            DialogResult x;
+            x = printDialog1.ShowDialog();
+
+            if (x == DialogResult.OK)
+                printDocument1.Print();
+        }
+
+
+        private void printPreviewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            printPreviewDialog1.Document = printDocument1;
+            printPreviewDialog1.ShowDialog();
+        }
 
     }
 }

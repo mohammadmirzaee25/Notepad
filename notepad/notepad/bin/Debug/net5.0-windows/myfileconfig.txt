@@ -1,0 +1,5 @@
+Window
+Tahoma
+12
+310
+646
