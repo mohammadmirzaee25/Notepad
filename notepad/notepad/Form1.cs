@@ -98,6 +98,18 @@ namespace notepad
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             //System.IO.File.WriteAllText("configs.txt", textBox1.BackColor.Name);
+            string[] x = new string[5];
+            x[0] = textBox1.BackColor.Name;
+
+            x[1] = textBox1.Font.Name;
+
+            x[2] = textBox1.Font.Size.ToString();
+
+            x[3] = this.Height.ToString();
+
+            x[4] = this.Width.ToString();
+
+            System.IO.File.WriteAllLines("myfileconfig.txt", x);
             newToolStripMenuItem_Click(null, null);
         }
 
@@ -106,6 +118,17 @@ namespace notepad
             //string c;
             //  c=System.IO.File.ReadAllText("configs.txt");
             // textBox1.BackColor = Color.FromName(c);
+            string[] x = new string[5];
+
+            if (System.IO.File.Exists("myfileconfig.txt")){
+
+                x = System.IO.File.ReadAllLines("myfileconfig.txt");
+                textBox1.BackColor = Color.FromName(x[0]);
+                textBox1.Font = new Font(x[1], Convert.ToInt16(x[2]);
+
+                this.Height = Convert.ToInt16(x[3]);
+                this.Width = Convert.ToInt16(x[4]);
+            }
             saved = true;
             notepadundo.SetText(textBox1.Text);
 
@@ -134,6 +157,7 @@ namespace notepad
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             saved = false;
+            set_col_row();
 
             if (!internalChange)
             {
@@ -306,6 +330,82 @@ namespace notepad
             }
 
         }
+
+        private void replaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form3 f3 = new Form3(this);
+            f3.Show(this);
+        }
+
+        public void Myreplace(string s)
+        {
+
+            if (textBox1.SelectedText.Length > 0)
+            {
+                textBox1.SelectedText = s;
+            }
+        }
+        public void Myreplaceall(string s, string str2, StringComparison cmptype, Boolean lefttoright)
+        {
+            while (findfunc(s, cmptype, lefttoright))
+            {
+                Myreplace(str2);
+            }
+        }
+
+        public int Getlines()
+        {
+            return textBox1.Lines.Length;
+        }
+        public void Goto(int line)
+        {
+            textBox1.SelectionStart = textBox1.GetFirstCharIndexFromLine(line);
+          
+        }
+
+        private void gotoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            gotoform f3 = new gotoform(this);
+            f3.ShowDialog();
+        }
+        public void set_col_row()
+        {
+            int cursorPos = textBox1.SelectionStart;
+            int line = textBox1.GetLineFromCharIndex(cursorPos) ;
+            int column = cursorPos - textBox1.GetFirstCharIndexFromLine(line);
+
+            toolStripStatusLabel1.Text = $"Line: {line + 1}, Column: {column + 1}";
+        }
+
+        private void textBox1_KeyUp(object sender, KeyEventArgs e)
+        {
+            set_col_row();
+        }
+
+        private void textBox1_Click(object sender, EventArgs e)
+        {
+            set_col_row();
+        }
+
+        public void setitemmenues_enabled()
+        {
+            copyToolStripMenuItem.Enabled = Convert.ToBoolean(textBox1.SelectionLength);
+            cutToolStripMenuItem.Enabled = (textBox1.SelectionLength > 0);
+
+
+            pasteToolStripMenuItem.Enabled = Clipboard.ContainsText();
+
+
+            findToolStripMenuItem.Enabled = textBox1.Text.Length > 0;
+            gotoToolStripMenuItem.Enabled = textBox1.Text.Length > 0;
+
+            saveAsToolStripMenuItem.Enabled = !saved;
+        }
+        private void fileToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            setitemmenues_enabled();
+        }
+
 
     }
 }

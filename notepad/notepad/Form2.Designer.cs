@@ -144,12 +144,12 @@ namespace notepad
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button findbutton;
-        private System.Windows.Forms.Button cancelbutton;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton downbutton;
-        private System.Windows.Forms.RadioButton upbutton;
-        private System.Windows.Forms.CheckBox checkbox1;
+        protected System.Windows.Forms.TextBox textBox1;
+        protected System.Windows.Forms.Button findbutton;
+        protected System.Windows.Forms.Button cancelbutton;
+        protected System.Windows.Forms.RadioButton downbutton;
+        protected System.Windows.Forms.RadioButton upbutton;
+        protected System.Windows.Forms.CheckBox checkbox1;
     }
 }

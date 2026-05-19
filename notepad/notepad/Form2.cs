@@ -18,6 +18,10 @@ namespace notepad
             mainform = fr;
             InitializeComponent();
         }
+        public Form2()
+        {
+            InitializeComponent();
+        }
 
         private void Form2_Load(object sender, EventArgs e)
         {
@@ -38,7 +42,7 @@ namespace notepad
             mainform.findfunc(textBox1.Text, matchcase , righttoleft);
         }
 
-        private void cancelbutton_Click(object sender, EventArgs e)
+        protected void cancelbutton_Click(object sender, EventArgs e)
         {
             this.Close();
         }
